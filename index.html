@@ -479,18 +479,24 @@
         @media (max-width: 768px) {
             .s1-grid {
                 grid-template-columns: 1fr;
-                grid-template-rows: 1fr 1fr;
+                grid-template-rows: auto 1fr;
             }
             .s1-left {
-                padding: 24px 28px 12px;
+                padding: 20px 20px 10px;
                 border-right: none;
                 border-bottom: 1px solid rgba(255,255,255,0.1);
             }
-            .s1-left h1 { font-size: 2.8rem; }
-            .typewriter-box { font-size: 0.9rem; min-height: 100px; }
-            .cake-wrap { transform: scale(0.75); }
-
-
+            .s1-left h1 { font-size: 2.2rem; margin-bottom: 10px; }
+            .typewriter-box { font-size: 0.85rem; height: 35vh; min-height: unset; padding-right: 5px; }
+            .cake-wrap { transform: scale(0.6); margin-top: -30px; }
+            
+            .cloud-shape {
+                width: 260px;
+                padding: 20px 15px;
+            }
+            .cloud-shape h2 { font-size: 1.8rem; }
+            .cloud-shape::before { width: 100px; height: 100px; top: -30px; left: 30px; }
+            .cloud-shape::after { width: 130px; height: 130px; top: -50px; right: 20px; }
         }
     </style>
 </head>
