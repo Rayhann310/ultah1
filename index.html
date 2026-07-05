@@ -367,25 +367,95 @@
             pointer-events: auto;
         }
 
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            grid-auto-rows: 150px;
-            gap: 10px;
-            width: 100vw;
-            height: 100vh;
-            padding: 10px;
-            box-sizing: border-box;
-            overflow-y: auto;
+        .photo-scroller {
+            position: absolute;
+            width: 100%;
+            height: 250vh;
+            top: 0;
+            left: 0;
+            animation: scrollBg 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes scrollBg {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(calc(-100% + 100vh)); }
+        }
+
+        .photo-scroller img {
+            position: absolute;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+
+        /* CLOUD POPUP */
+        .cloud-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1000;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .cloud-popup.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .cloud-shape {
+            background: #fff;
+            width: 320px;
+            padding: 30px 20px;
+            border-radius: 80px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .cloud-shape::before, .cloud-shape::after {
+            content: '';
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        .cloud-shape::before {
+            width: 130px; height: 130px;
+            top: -50px; left: 40px;
+        }
+        .cloud-shape::after {
+            width: 170px; height: 170px;
+            top: -70px; right: 30px;
+        }
+
+        .cloud-shape h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #e84393;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
         }
         
-        .photo-grid img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            opacity: 0;
-            transform: scale(0.8) translateY(20px);
+        #closeCloudBtn {
+            background: #fd79a8;
+            color: #fff;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: background 0.3s;
+        }
+        #closeCloudBtn:hover {
+            background: #e84393;
         }
 
         /* ============================================================
@@ -420,10 +490,7 @@
             .typewriter-box { font-size: 0.9rem; min-height: 100px; }
             .cake-wrap { transform: scale(0.75); }
 
-            .photo-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                grid-auto-rows: 100px;
-            }
+
         }
     </style>
 </head>
@@ -520,9 +587,17 @@
         </div>
     </section>
 
-    <!-- SECTION 2 : FOTO GRID GRID -->
+    <!-- SECTION 2 : FOTO BERGULIR ACAK -->
     <section id="section2">
-        <div class="photo-grid" id="photoGrid"></div>
+        <div class="photo-scroller" id="photoScroller"></div>
+        
+        <!-- Cloud Popup -->
+        <div id="cloudPopup" class="cloud-popup">
+            <div class="cloud-shape">
+                <h2>Selamat Ulang Tahun!</h2>
+                <button id="closeCloudBtn">Tutup</button>
+            </div>
+        </div>
     </section>
 
     <!-- CDNs JS -->
@@ -680,28 +755,54 @@
                 section2.style.opacity       = '1';
                 section2.style.pointerEvents = 'auto';
 
-                const grid = document.getElementById('photoGrid');
-                if (grid.children.length === 0) {
+                const scroller = document.getElementById('photoScroller');
+                if (scroller.children.length === 0) {
                     const totalPhotos = 12;
-                    // Bikin grid dengan 48 foto agar layar penuh
-                    for (let i = 0; i < 48; i++) {
+                    const numPhotosToGenerate = 60; // 60 foto diacak
+                    
+                    for (let i = 0; i < numPhotosToGenerate; i++) {
                         const imgNum = (i % totalPhotos) + 1;
                         const img = document.createElement('img');
                         img.src = `foto${imgNum}.jpg`;
-                        // Error fallback if image is missing
                         img.onerror = () => { img.style.display = 'none'; };
-                        grid.appendChild(img);
+                        
+                        // Posisi dan rotasi acak
+                        const size = Math.random() * 80 + 100; // 100px - 180px
+                        const left = Math.random() * 80; // 0 - 80% (biar ngga tembus kanan)
+                        const top = Math.random() * 95; // 0 - 95% dr tinggi 250vh
+                        const rot = Math.random() * 40 - 20; // -20deg sampai 20deg
+                        
+                        img.style.width = `${size}px`;
+                        img.style.height = `${size}px`;
+                        img.style.left = `${left}%`;
+                        img.style.top = `${top}%`;
+                        img.dataset.rot = rot;
+                        
+                        scroller.appendChild(img);
                     }
                 }
-                
-                // Animate fade in acak
-                const gridImgs = document.querySelectorAll('.photo-grid img');
+
+                // Fade in acak
+                const gridImgs = document.querySelectorAll('.photo-scroller img');
+                let maxDelay = 0;
                 gridImgs.forEach((img, idx) => {
+                    const delay = Math.random() * 2500 + (idx * 20);
+                    if (delay > maxDelay) maxDelay = delay;
+                    
                     setTimeout(() => {
-                        img.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
                         img.style.opacity = '1';
-                        img.style.transform = 'scale(1) translateY(0)';
-                    }, Math.random() * 800 + (idx * 20));
+                        img.style.transform = `scale(1) rotate(${img.dataset.rot}deg)`;
+                    }, delay);
+                });
+
+                // Tampilkan awan setelah semua foto mulai tampil (margin 1 detik)
+                setTimeout(() => {
+                    document.getElementById('cloudPopup').classList.add('show');
+                }, maxDelay + 1000);
+
+                // Event Listener Tutup Awan
+                document.getElementById('closeCloudBtn').addEventListener('click', () => {
+                    document.getElementById('cloudPopup').classList.remove('show');
                 });
             }, 800);
         }
