@@ -1,0 +1,261 @@
+/* Font Kustom dari Google Fonts */
+.font-dancing {
+    font-family: 'Dancing Script', cursive;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Base class untuk setiap halaman - Full Page seperti beda URL */
+.page-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 16px;
+    --animate-duration: 0.8s;
+}
+
+/* Sembunyikan halaman tidak aktif */
+.page-section.d-none {
+    display: none !important;
+}
+
+/* ====== BACKGROUND TIAP HALAMAN (BERBEDA) ====== */
+.bg-page-1 {
+    background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+    background-size: 300% 300%;
+    animation: gradientBG 8s ease infinite;
+}
+
+.bg-page-2 {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 60%, #ffecd2 100%);
+    background-size: 300% 300%;
+    animation: gradientBG 8s ease infinite;
+}
+
+.bg-page-3 {
+    background: linear-gradient(135deg, #c471f5 0%, #fa71cd 50%, #fbc2eb 100%);
+    background-size: 300% 300%;
+    animation: gradientBG 8s ease infinite;
+}
+
+@keyframes gradientBG {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ====== GLASSMORPHISM CARD ====== */
+.glass-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(200, 100, 200, 0.18);
+}
+
+/* ====== TOMBOL KADO ====== */
+#openGiftBtn {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    cursor: pointer;
+}
+#openGiftBtn:hover {
+    transform: scale(1.12);
+}
+
+/* ====== BINGKAI FOTO ====== */
+.photo-frame {
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), box-shadow 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    cursor: pointer;
+}
+.photo-frame:hover {
+    transform: rotate(0deg) scale(1.06) !important;
+    box-shadow: 0 16px 40px rgba(200, 80, 200, 0.3);
+}
+
+/* ====== HATI MELAYANG (FLOATING HEARTS) ====== */
+.floating-heart {
+    position: fixed;
+    bottom: -80px;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.75;
+    color: #e84393;
+}
+
+@keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 0.85; }
+    80%  { opacity: 0.6; }
+    100% { transform: translateY(-110vh) rotate(360deg) scale(1.3); opacity: 0; }
+}
+
+/* ====== MOBILE RESPONSIVE ====== */
+@media (max-width: 768px) {
+    /* Di HP: foto stack vertikal, ukuran lebih kecil */
+    .photo-frame img {
+        height: 220px !important;
+    }
+    .photo-frame {
+        max-width: 100% !important;
+    }
+    .glass-card {
+        padding: 1.5rem !important;
+    }
+    .display-5 {
+        font-size: 2rem !important;
+    }
+    .display-3 {
+        font-size: 2.5rem !important;
+    }
+    /* Foto urut vertikal di HP: foto1 > pesan > foto2 */
+    #section3 .row {
+        flex-direction: column;
+    }
+}
+
+/* ====== INTRO OVERLAY (LAYAR HITAM) ====== */
+#introOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease;
+}
+#introContent {
+    text-align: center;
+    color: #fff;
+    animation: pulse 1.5s ease infinite;
+}
+#introContent i {
+    display: block;
+    margin-bottom: 12px;
+}
+#introText {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3rem;
+    color: #fbc2eb;
+    letter-spacing: 3px;
+}
+
+/* ====== BIRTHDAY CAKE CSS ====== */
+.birthday-cake-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto 10px;
+    width: fit-content;
+}
+
+/* Baris Lilin */
+.candles-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 2;
+}
+.candle {
+    width: 14px;
+    height: 40px;
+    background: linear-gradient(180deg, #ffeaa7, #fdcb6e);
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.candle.tall {
+    height: 55px;
+    background: linear-gradient(180deg, #a29bfe, #6c5ce7);
+}
+/* Api lilin */
+.flame {
+    width: 10px;
+    height: 14px;
+    background: radial-gradient(ellipse at 50% 70%, #ff9a00 0%, #ff6b00 50%, transparent 100%);
+    border-radius: 50% 50% 30% 30%;
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: flicker 0.5s ease-in-out alternate infinite;
+    box-shadow: 0 0 6px 3px rgba(255, 150, 0, 0.5), 0 0 12px 4px rgba(255, 80, 0, 0.25);
+}
+.candle.tall .flame {
+    background: radial-gradient(ellipse at 50% 70%, #ff9ff3 0%, #fd79a8 50%, transparent 100%);
+    box-shadow: 0 0 6px 3px rgba(255, 100, 200, 0.5);
+}
+@keyframes flicker {
+    0%   { transform: translateX(-50%) scaleY(1)   rotate(-2deg); opacity: 1; }
+    100% { transform: translateX(-50%) scaleY(0.85) rotate(2deg);  opacity: 0.85; }
+}
+
+/* Layer Kue */
+.cake-layer {
+    position: relative;
+    width: 200px;
+}
+.top-layer {
+    width: 170px;
+    margin: 0 auto;
+}
+.bottom-layer {
+    width: 210px;
+    margin: 0 auto;
+}
+.frosting-top {
+    height: 14px;
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+.cake-body {
+    height: 55px;
+    border-radius: 0 0 4px 4px;
+}
+.bottom-layer .cake-body {
+    height: 65px;
+}
+
+/* Drip (tetesan frosting) */
+.drip {
+    position: absolute;
+    width: 14px;
+    height: 22px;
+    background: #fff;
+    border-radius: 0 0 50% 50%;
+    top: 10px;
+}
+.d1 { left: 20px; }
+.d2 { left: 50%; transform: translateX(-50%); }
+.d3 { right: 20px; }
+
+/* Alas Kue */
+.cake-plate {
+    width: 230px;
+    height: 16px;
+    background: linear-gradient(180deg, #dfe6e9, #b2bec3);
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}

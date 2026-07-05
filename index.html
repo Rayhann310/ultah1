@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Feny!</title>
+
+    <!-- FULL CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* ============================================================
+           INTRO OVERLAY
+        ============================================================ */
+        #introOverlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s ease;
+        }
+        #introOverlay .intro-inner {
+            text-align: center;
+            color: #fff;
+        }
+        #introOverlay .intro-inner i {
+            font-size: 3rem;
+            color: #e84393;
+            display: block;
+            margin-bottom: 14px;
+        }
+        #introOverlay .intro-inner p {
+            font-size: 1.4rem;
+            color: #fbc2eb;
+            letter-spacing: 4px;
+            transition: opacity 0.5s;
+        }
+
+        /* ============================================================
+           SECTION 1 — BG HITAM, LAYOUT 2 KOLOM
+        ============================================================ */
+        #section1 {
+            position: absolute;
+            inset: 0;
+            background: #0d0d0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .s1-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+        }
+
+        .s1-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 50px;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        .s1-left .pre-label {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            color: #e84393;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.5s;
+        }
+        .s1-left h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.9s;
+        }
+        .s1-left h1 span { color: #fd79a8; }
+        .typewriter-box {
+            font-size: 1.05rem;
+            color: #ccc;
+            line-height: 1.9;
+            min-height: 180px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 1.3s;
+        }
+        #typewriterText { display: inline; }
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: #fd79a8;
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: blink 0.75s step-end infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        .s1-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .s1-right::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(232,67,147,0.03);
+            transition: background 0.3s;
+        }
+        .s1-right:hover::after {
+            background: rgba(232,67,147,0.07);
+        }
+
+        .tap-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: pulse 2s ease infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+        /* ============================================================
+           BIRTHDAY CAKE (CSS)
+        ============================================================ */
+        .cake-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transform: scale(0);
+            opacity: 0;
+        }
+        .cake-wrap.show {
+            animation: zoomInCake 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes zoomInCake {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .candles-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 3;
+        }
+        .candle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .candle-body {
+            width: 16px;
+            height: 50px;
+            border-radius: 4px 4px 2px 2px;
+        }
+        .candle:nth-child(1) .candle-body { background: linear-gradient(#ffeaa7, #fdcb6e); }
+        .candle:nth-child(2) .candle-body { background: linear-gradient(#a29bfe, #6c5ce7); height: 65px; }
+        .candle:nth-child(3) .candle-body { background: linear-gradient(#81ecec, #00cec9); }
+        .candle:nth-child(4) .candle-body { background: linear-gradient(#fd79a8, #e84393); height: 65px; }
+        .candle:nth-child(5) .candle-body { background: linear-gradient(#ffeaa7, #fdcb6e); }
+
+        .flame {
+            width: 12px;
+            height: 18px;
+            background: radial-gradient(ellipse at 50% 75%, #ff9a00 0%, #ff6b00 55%, transparent 100%);
+            border-radius: 50% 50% 30% 30%;
+            position: relative;
+            animation: flicker 0.45s ease-in-out alternate infinite;
+            box-shadow: 0 0 8px 4px rgba(255,150,0,0.55), 0 0 18px 6px rgba(255,80,0,0.2);
+            transition: all 0.4s ease;
+        }
+        .flame.pink {
+            background: radial-gradient(ellipse at 50% 75%, #ff9ff3 0%, #fd79a8 55%, transparent 100%);
+            box-shadow: 0 0 8px 4px rgba(255,100,200,0.55);
+        }
+        .flame.blue {
+            background: radial-gradient(ellipse at 50% 75%, #81ecec 0%, #00cec9 55%, transparent 100%);
+            box-shadow: 0 0 8px 4px rgba(0,200,200,0.55);
+        }
+        @keyframes flicker {
+            from { transform: scaleY(1) rotate(-2deg); }
+            to   { transform: scaleY(0.82) rotate(2deg); }
+        }
+        .flame.blown {
+            animation: blowOut 0.3s ease forwards;
+        }
+        @keyframes blowOut {
+            0%   { transform: scaleY(1) scaleX(1); opacity: 1; }
+            50%  { transform: scaleX(2) scaleY(0.3) translateX(8px); opacity: 0.6; }
+            100% { transform: scaleY(0) scaleX(0); opacity: 0; }
+        }
+
+        .cake-top {
+            width: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .cake-top .frosting { height: 16px; background: #fff; border-radius: 12px 12px 0 0; }
+        .cake-top .body     { height: 60px; background: #f9c6d0; position: relative; overflow: hidden; }
+        .cake-top .body::after {
+            content: '❤ ❤ ❤';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            opacity: 0.3;
+        }
+
+        .cake-bottom {
+            width: 240px;
+            margin: 0 auto;
+        }
+        .cake-bottom .frosting { height: 16px; background: #ffeaa7; border-radius: 10px 10px 0 0; }
+        .cake-bottom .body     { height: 70px; background: #fd79a8; }
+
+        .drips {
+            position: relative;
+            height: 0;
+        }
+        .drip {
+            position: absolute;
+            width: 14px;
+            height: 24px;
+            border-radius: 0 0 50% 50%;
+            top: 0;
+        }
+        .drip.white { background: #fff; }
+        .drip.yellow { background: #ffeaa7; }
+
+        .cake-plate {
+            width: 270px;
+            height: 18px;
+            background: linear-gradient(#dfe6e9, #b2bec3);
+            border-radius: 50%;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+        }
+
+        .smoke {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 0;
+            background: transparent;
+            pointer-events: none;
+        }
+        .smoke::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            animation: none;
+        }
+        .smoke.active::before {
+            animation: smokeRise 1.5s ease forwards;
+        }
+        @keyframes smokeRise {
+            0%   { width: 4px; height: 4px; opacity: 0.8; transform: translateX(-50%) translateY(0); }
+            100% { width: 20px; height: 20px; opacity: 0; transform: translateX(-50%) translateY(-40px); }
+        }
+
+        .cake-glow {
+            width: 220px;
+            height: 20px;
+            background: radial-gradient(ellipse, rgba(253,121,168,0.5) 0%, transparent 70%);
+            margin: 4px auto 0;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           SECTION 2 — NAILONG + 3 FOTO (foto1 di tengah)
+        ============================================================ */
+        #section2 {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+            padding: 20px;
+            gap: 28px;
+        }
+        #section2.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .s2-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .s2-gallery img {
+            max-width: 240px;
+            max-height: 240px;
+            object-fit: cover;
+            border-radius: 28px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+            opacity: 0;
+        }
+        .s2-gallery img:hover {
+            transform: scale(1.04) rotate(-1.5deg);
+            box-shadow: 0 24px 56px rgba(0,0,0,0.20);
+        }
+
+        /* foto1 di tengah: ukuran lebih besar */
+        .s2-gallery img.foto-tengah {
+            max-width: 300px;
+            max-height: 300px;
+            order: 0; /* default, tapi kita atur via flex order */
+            flex: 0 0 auto;
+        }
+
+        #nailongImg {
+            max-width: 240px;
+            max-height: 180px;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 28px rgba(0,0,0,0.08));
+            border-radius: 30px;
+            background: #fafafa;
+            padding: 8px 16px;
+            opacity: 0;
+        }
+
+        /* ============================================================
+           PARTICLE EXPLOSION
+        ============================================================ */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 8888;
+            animation: particleExplode var(--dur, 1s) ease forwards;
+        }
+        @keyframes particleExplode {
+            0%   { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* ============================================================
+           RESPONSIVE MOBILE
+        ============================================================ */
+        @media (max-width: 768px) {
+            .s1-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            .s1-left {
+                padding: 24px 28px 12px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .s1-left h1 { font-size: 2.8rem; }
+            .typewriter-box { font-size: 0.9rem; min-height: 100px; }
+            .cake-wrap { transform: scale(0.75); }
+
+            .s2-gallery img {
+                max-width: 140px;
+                max-height: 140px;
+            }
+            .s2-gallery img.foto-tengah {
+                max-width: 180px;
+                max-height: 180px;
+            }
+            #nailongImg {
+                max-width: 160px;
+                max-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🎵 Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- INTRO OVERLAY -->
+    <div id="introOverlay">
+        <div class="intro-inner">
+            <i class="fa-solid fa-heart fa-beat"></i>
+            <p id="introMsg">Sebentar...</p>
+        </div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <section id="section1">
+        <div class="s1-grid">
+
+            <!-- KIRI: Ucapan Typewriter -->
+            <div class="s1-left">
+                <p class="pre-label"><i class="fa-solid fa-star me-2" style="font-size:0.7rem;"></i> Special for you</p>
+                <h1>Happy <span>Birthday</span>,<br>Feny!</h1>
+                <div class="typewriter-box">
+                    <span id="typewriterText"></span><span class="cursor-blink"></span>
+                </div>
+            </div>
+
+            <!-- KANAN: Kue Ulang Tahun + Tap -->
+            <div class="s1-right" id="rightSide">
+                <div class="cake-wrap" id="cakeWrap">
+                    <!-- Lilin -->
+                    <div class="candles-row" id="candlesRow">
+                        <div class="candle">
+                            <div class="smoke" id="smoke0"></div>
+                            <div class="flame" id="flame0"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="smoke" id="smoke1"></div>
+                            <div class="flame pink" id="flame1"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="smoke" id="smoke2"></div>
+                            <div class="flame" id="flame2"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="smoke" id="smoke3"></div>
+                            <div class="flame blue" id="flame3"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="smoke" id="smoke4"></div>
+                            <div class="flame" id="flame4"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                    </div>
+
+                    <!-- Layer Kue Atas -->
+                    <div class="cake-top">
+                        <div class="drips">
+                            <div class="drip white" style="left:20px;"></div>
+                            <div class="drip white" style="left:50%;transform:translateX(-50%);"></div>
+                            <div class="drip white" style="right:20px;"></div>
+                        </div>
+                        <div class="frosting"></div>
+                        <div class="body"></div>
+                    </div>
+
+                    <!-- Layer Kue Bawah -->
+                    <div class="cake-bottom">
+                        <div class="drips">
+                            <div class="drip yellow" style="left:24px;"></div>
+                            <div class="drip yellow" style="left:50%;transform:translateX(-50%);"></div>
+                            <div class="drip yellow" style="right:24px;"></div>
+                        </div>
+                        <div class="frosting"></div>
+                        <div class="body"></div>
+                    </div>
+
+                    <div class="cake-plate"></div>
+                    <div class="cake-glow"></div>
+                </div>
+
+                <p class="tap-hint">
+                    <i class="fa-solid fa-hand-pointer me-2"></i>Tap di sini
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 : NAILONG + FOTO 1 (tengah) + FOTO 2 + FOTO 3 -->
+    <section id="section2">
+        <img src="nailong.gif" alt="Nailong" id="nailongImg" class="animate__animated">
+        <div class="s2-gallery">
+            <!-- foto2 di kiri -->
+            <img src="foto2.jpg" alt="foto 2" class="gallery-img animate__animated" data-delay="0.2">
+            <!-- foto1 di tengah (ukuran lebih besar) -->
+            <img src="foto1.jpg" alt="foto 1" class="gallery-img foto-tengah animate__animated" data-delay="0.1">
+            <!-- foto3 di kanan -->
+            <img src="foto3.jpg" alt="foto 3" class="gallery-img animate__animated" data-delay="0.4">
+        </div>
+    </section>
+
+    <!-- CDNs JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+    (() => {
+        // ================================================================
+        // ELEMENTS
+        // ================================================================
+        const introOverlay  = document.getElementById('introOverlay');
+        const introMsg      = document.getElementById('introMsg');
+        const section1      = document.getElementById('section1');
+        const section2      = document.getElementById('section2');
+        const cakeWrap      = document.getElementById('cakeWrap');
+        const rightSide     = document.getElementById('rightSide');
+        const nailongImg    = document.getElementById('nailongImg');
+        const galleryImgs   = document.querySelectorAll('.gallery-img');
+
+        const flames  = [0,1,2,3,4].map(i => document.getElementById(`flame${i}`));
+        const smokes  = [0,1,2,3,4].map(i => document.getElementById(`smoke${i}`));
+
+        let candlesBlown = false;
+
+        // ================================================================
+        // TEKS UCAPAN (Typewriter)
+        // ================================================================
+        const ucapan = `Selamat ulang tahun, Feny Fadya!\n\nDi hari yang istimewa ini, semoga setiap mimpimu perlahan terwujud, setiap langkahmu selalu diiringi kebahagiaan, dan senyummu tidak pernah pudar.\n\nTerima kasih sudah hadir dan menjadi bagian terindah dalam hari-hariku. I love you! ❤`;
+
+        const typeEl = document.getElementById('typewriterText');
+        let typeIdx  = 0;
+        let typeTimer;
+
+        function startTypewriter() {
+            typeTimer = setInterval(() => {
+                if (typeIdx < ucapan.length) {
+                    const ch = ucapan[typeIdx];
+                    typeEl.innerHTML += ch === '\n' ? '<br>' : ch;
+                    typeIdx++;
+                } else {
+                    clearInterval(typeTimer);
+                }
+            }, 45);
+        }
+
+        // ================================================================
+        // INTRO OVERLAY
+        // ================================================================
+        const msgs = ['Sebentar...', 'Ada kejutan buat kamu...', 'Siap-siap ya sayang...'];
+        let mIdx = 0;
+        const mTimer = setInterval(() => {
+            mIdx++;
+            if (mIdx < msgs.length) {
+                introMsg.style.opacity = 0;
+                setTimeout(() => {
+                    introMsg.textContent    = msgs[mIdx];
+                    introMsg.style.opacity  = 1;
+                }, 400);
+            }
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval(mTimer);
+            introOverlay.style.opacity = '0';
+
+            setTimeout(() => {
+                introOverlay.style.display = 'none';
+                section1.style.opacity       = '1';
+                section1.style.pointerEvents = 'auto';
+                cakeWrap.classList.add('show');
+                startTypewriter();
+            }, 1200);
+        }, 3000);
+
+        // ================================================================
+        // BLOW OUT CANDLES
+        // ================================================================
+        function blowOutCandles() {
+            if (candlesBlown) return;
+            candlesBlown = true;
+
+            flames.forEach((flame, i) => {
+                setTimeout(() => {
+                    flame.classList.add('blown');
+                    const smoke = smokes[i];
+                    smoke.classList.add('active');
+                }, i * 120);
+            });
+
+            setTimeout(() => {
+                triggerExplosion();
+            }, flames.length * 120 + 300);
+        }
+
+        // ================================================================
+        // PARTICLE EXPLOSION
+        // ================================================================
+        function triggerExplosion() {
+            const colors = ['#fd79a8','#fbc2eb','#f1c40f','#e84393','#a29bfe','#00cec9','#fff'];
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+
+            for (let i = 0; i < 60; i++) {
+                const p     = document.createElement('div');
+                const angle = Math.random() * Math.PI * 2;
+                const dist  = 120 + Math.random() * 250;
+                const size  = 6 + Math.random() * 14;
+                const dur   = 0.6 + Math.random() * 0.8;
+
+                p.className = 'particle';
+                p.style.cssText = `
+                    left: ${cx}px;
+                    top: ${cy}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    --tx: ${Math.cos(angle) * dist}px;
+                    --ty: ${Math.sin(angle) * dist}px;
+                    --dur: ${dur}s;
+                `;
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), dur * 1000 + 100);
+            }
+
+            confetti({
+                particleCount: 200,
+                spread: 160,
+                origin: { x: 0.75, y: 0.5 },
+                colors: ['#fd79a8','#fbc2eb','#f1c40f','#e84393','#a29bfe']
+            });
+
+            setTimeout(() => goToSection2(), 900);
+        }
+
+        // ================================================================
+        // PINDAH KE SECTION 2 + ANIMASI GALERI (foto1 di tengah)
+        // ================================================================
+        function goToSection2() {
+            section1.style.transition = 'opacity 0.8s ease';
+            section1.style.opacity    = '0';
+            
+            // Putar musik (Autoplay lagu.mp3 di bg putih)
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.play().catch(e => console.log('Autoplay diblokir', e));
+            }
+
+            setTimeout(() => {
+                section1.style.display = 'none';
+                section2.style.opacity       = '1';
+                section2.style.pointerEvents = 'auto';
+
+                nailongImg.style.opacity = '1';
+                nailongImg.classList.add('animate__zoomIn');
+
+                galleryImgs.forEach((img) => {
+                    const delay = parseFloat(img.dataset.delay) || 0.2;
+                    img.style.opacity = '1';
+                    img.classList.add('animate__fadeInUp');
+                    img.style.animationDelay = `${delay}s`;
+                });
+            }, 800);
+        }
+
+        // ================================================================
+        // EVENT: TAP KANAN
+        // ================================================================
+        rightSide.addEventListener('click', () => {
+            if (section1.style.opacity === '1') {
+                blowOutCandles();
+            }
+        });
+
+    })();
+    </script>
+</body>
+</html>
