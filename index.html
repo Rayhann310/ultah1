@@ -384,8 +384,10 @@
         .photo-scroller img {
             position: absolute;
             object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: #fff;
+            padding: 6px;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             opacity: 0;
             transition: opacity 1.5s ease, transform 1.5s ease;
         }
@@ -772,11 +774,22 @@
                         img.src = `foto${imgNum}.jpg`;
                         img.onerror = () => { img.style.display = 'none'; };
                         
-                        // Posisi dan rotasi acak
-                        const size = Math.random() * 80 + 100; // 100px - 180px
-                        const left = Math.random() * 80; // 0 - 80% (biar ngga tembus kanan)
-                        const top = Math.random() * 95; // 0 - 95% dr tinggi 250vh
-                        const rot = Math.random() * 40 - 20; // -20deg sampai 20deg
+                        const cols = window.innerWidth < 768 ? 3 : 5;
+                        const rows = Math.ceil(numPhotosToGenerate / cols);
+                        const cellWidth = 100 / cols; // %
+                        const cellHeight = 100 / rows; // %
+                        
+                        const col = i % cols;
+                        const row = Math.floor(i / cols);
+
+                        // Random offset within the cell (keeps it neat but scattered)
+                        const offsetX = (Math.random() * 0.4 * cellWidth); 
+                        const offsetY = (Math.random() * 0.4 * cellHeight);
+
+                        const size = Math.random() * 60 + (window.innerWidth < 768 ? 100 : 160); // responsif size
+                        const left = (col * cellWidth) + offsetX; 
+                        const top = (row * cellHeight) + offsetY;
+                        const rot = Math.random() * 30 - 15; // -15deg sampai 15deg
                         
                         img.style.width = `${size}px`;
                         img.style.height = `${size}px`;
