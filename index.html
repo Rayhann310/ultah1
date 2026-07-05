@@ -101,13 +101,18 @@
         }
         .s1-left h1 span { color: #fd79a8; }
         .typewriter-box {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             color: #ccc;
-            line-height: 1.9;
-            min-height: 180px;
+            line-height: 1.6;
+            height: 60vh;
+            overflow-y: auto;
             opacity: 0;
             animation: fadeUp 0.8s ease forwards 1.3s;
+            padding-right: 15px;
         }
+        .typewriter-box::-webkit-scrollbar { width: 6px; }
+        .typewriter-box::-webkit-scrollbar-track { background: transparent; }
+        .typewriter-box::-webkit-scrollbar-thumb { background: rgba(232,67,147,0.5); border-radius: 3px; }
         #typewriterText { display: inline; }
         .cursor-blink {
             display: inline-block;
@@ -348,37 +353,39 @@
             margin: 0 auto;
         }
 
-        .s2-gallery img {
-            max-width: 240px;
-            max-height: 240px;
+        #section2 {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+            overflow: hidden;
+        }
+        #section2.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-auto-rows: 150px;
+            gap: 10px;
+            width: 100vw;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        
+        .photo-grid img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 28px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+            border-radius: 10px;
             opacity: 0;
-        }
-        .s2-gallery img:hover {
-            transform: scale(1.04) rotate(-1.5deg);
-            box-shadow: 0 24px 56px rgba(0,0,0,0.20);
-        }
-
-        /* foto1 di tengah: ukuran lebih besar */
-        .s2-gallery img.foto-tengah {
-            max-width: 300px;
-            max-height: 300px;
-            order: 0; /* default, tapi kita atur via flex order */
-            flex: 0 0 auto;
-        }
-
-        #nailongImg {
-            max-width: 240px;
-            max-height: 180px;
-            object-fit: contain;
-            filter: drop-shadow(0 12px 28px rgba(0,0,0,0.08));
-            border-radius: 30px;
-            background: #fafafa;
-            padding: 8px 16px;
-            opacity: 0;
+            transform: scale(0.8) translateY(20px);
         }
 
         /* ============================================================
@@ -413,17 +420,9 @@
             .typewriter-box { font-size: 0.9rem; min-height: 100px; }
             .cake-wrap { transform: scale(0.75); }
 
-            .s2-gallery img {
-                max-width: 140px;
-                max-height: 140px;
-            }
-            .s2-gallery img.foto-tengah {
-                max-width: 180px;
-                max-height: 180px;
-            }
-            #nailongImg {
-                max-width: 160px;
-                max-height: 120px;
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                grid-auto-rows: 100px;
             }
         }
     </style>
@@ -521,17 +520,9 @@
         </div>
     </section>
 
-    <!-- SECTION 2 : NAILONG + FOTO 1 (tengah) + FOTO 2 + FOTO 3 -->
+    <!-- SECTION 2 : FOTO GRID GRID -->
     <section id="section2">
-        <img src="nailong.gif" alt="Nailong" id="nailongImg" class="animate__animated">
-        <div class="s2-gallery">
-            <!-- foto2 di kiri -->
-            <img src="foto2.jpg" alt="foto 2" class="gallery-img animate__animated" data-delay="0.2">
-            <!-- foto1 di tengah (ukuran lebih besar) -->
-            <img src="foto1.jpg" alt="foto 1" class="gallery-img foto-tengah animate__animated" data-delay="0.1">
-            <!-- foto3 di kanan -->
-            <img src="foto3.jpg" alt="foto 3" class="gallery-img animate__animated" data-delay="0.4">
-        </div>
+        <div class="photo-grid" id="photoGrid"></div>
     </section>
 
     <!-- CDNs JS -->
@@ -560,9 +551,10 @@
         // ================================================================
         // TEKS UCAPAN (Typewriter)
         // ================================================================
-        const ucapan = `Selamat ulang tahun, Feny Fadya!\n\nDi hari yang istimewa ini, semoga setiap mimpimu perlahan terwujud, setiap langkahmu selalu diiringi kebahagiaan, dan senyummu tidak pernah pudar.\n\nTerima kasih sudah hadir dan menjadi bagian terindah dalam hari-hariku. I love you! ❤`;
+        const ucapan = `Assalamualaikum wr. Wb\n\nKepada yth\nFeny Fadya,\n\nHari ini kamu ulang tahun. Baguslah.\nKamu harus tahu, Di umur yang sekarang allah kirim hadiah terbaiknya untukmu.\n\nHadiah yang mahal, keren, hebat, komplit di kemas dalam bentuk Meigovic Suparta\n\nbumi ini berputar sebenarnya bukan cuma karena hukum fisika, tapi karena pusing nya dia menghadapi Meigovic Suparta\n\nAku tahu hari ini kamu lahir. Jadi, bersyukurlah kamu dilahirkan di bumi yang sama dengan orang sekeren aku.\n\nDi usiamu yang baru ini, tidak usah repot-repot berubah jadi orang lain demi menyenangkan dunia. Dunia yang harus menyesuaikan diri dengan kita. Kurangi beban pikiranmu, biarkan itu jadi urusan orang-orang yang tidak secerdas kita.\n\nSelamat ulang tahun, Feny. Tetaplah menjadi kamu yang sekarang: beruntung karena mengenal aku, dan keren karena memang begitu takdirmu. Jangan lagi sedih, jangan lagi takut, jangan lagi pokoknya.\n\nYakin aja setiap masalah ada solusinya, dan solusi itu hadir dalam wujud Meigovic Suparta.\n\nIntinya kamu hebat karena kamu punya aku wkkwkwk. Milyaran orang di semesta berebut buat dapet Meigovic Suparta, ehh dianya malah nyangkut di Feny Fadya.\n\nSekian wassalam.`;
 
         const typeEl = document.getElementById('typewriterText');
+        const typeBox = document.querySelector('.typewriter-box');
         let typeIdx  = 0;
         let typeTimer;
 
@@ -572,10 +564,13 @@
                     const ch = ucapan[typeIdx];
                     typeEl.innerHTML += ch === '\n' ? '<br>' : ch;
                     typeIdx++;
+                    
+                    // Auto scroll ke bawah
+                    typeBox.scrollTop = typeBox.scrollHeight;
                 } else {
                     clearInterval(typeTimer);
                 }
-            }, 45);
+            }, 30);
         }
 
         // ================================================================
@@ -685,14 +680,28 @@
                 section2.style.opacity       = '1';
                 section2.style.pointerEvents = 'auto';
 
-                nailongImg.style.opacity = '1';
-                nailongImg.classList.add('animate__zoomIn');
-
-                galleryImgs.forEach((img) => {
-                    const delay = parseFloat(img.dataset.delay) || 0.2;
-                    img.style.opacity = '1';
-                    img.classList.add('animate__fadeInUp');
-                    img.style.animationDelay = `${delay}s`;
+                const grid = document.getElementById('photoGrid');
+                if (grid.children.length === 0) {
+                    const totalPhotos = 12;
+                    // Bikin grid dengan 48 foto agar layar penuh
+                    for (let i = 0; i < 48; i++) {
+                        const imgNum = (i % totalPhotos) + 1;
+                        const img = document.createElement('img');
+                        img.src = `foto${imgNum}.jpg`;
+                        // Error fallback if image is missing
+                        img.onerror = () => { img.style.display = 'none'; };
+                        grid.appendChild(img);
+                    }
+                }
+                
+                // Animate fade in acak
+                const gridImgs = document.querySelectorAll('.photo-grid img');
+                gridImgs.forEach((img, idx) => {
+                    setTimeout(() => {
+                        img.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        img.style.opacity = '1';
+                        img.style.transform = 'scale(1) translateY(0)';
+                    }, Math.random() * 800 + (idx * 20));
                 });
             }, 800);
         }
